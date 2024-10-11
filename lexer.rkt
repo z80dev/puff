@@ -1,12 +1,12 @@
 #lang racket
-(require brag/support rackunit "huffparser.rkt")
+(require brag/support rackunit "huffparser.rkt" "utils.rkt" "assembler.rkt" "huff-ops.rkt")
 
 (define-lex-abbrevs
   [digits               (:+ (char-set "0123456789"))]
   [str              (:seq "\"" (:+ (char-set "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789./")) "\"")]
   [digitsOrLetters      (:+ (char-set "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"))]
   [hex-digits           (:+ (char-set "0123456789abcdefABCDEF"))]
-  [opcode               (:+ "calldataload" "mstore" "return" "add" "log3" "jump" "sub" "swap1" "codecopy" "stop" "dup1" "dup2" "jumpi" "pop" "mstore" "msize" "revert")]
+  [opcode               (:or huff-ops)]
   [hex-literal          (:seq "0x" hex-digits)]
   [funcdef              (from/stop-before (:seq "#define function ") (:or " /" "\n"))]
   [eventdef             (from/stop-before (:seq "#define event ") (:or " /" "\n"))]
@@ -44,19 +44,6 @@
    ["table"             (token 'TABLE lexeme)]
    ["takes"              (token 'TAKES lexeme)]
    ["returns"            (token 'RETURNS lexeme)]
-   ["event"              (token 'EVENT lexeme)]
-   ["error"              (token 'ERROR lexeme)]
-   ["constant"           (token 'CONSTANT lexeme)]
-   ["takes"              (token 'TAKES lexeme)]
-   ["returns"            (token 'RETURNS lexeme)]
-   ["takes"              (token 'TAKES lexeme)]
-   ["returns"            (token 'RETURNS lexeme)]
-   ["event"              (token 'EVENT lexeme)]
-   ["error"              (token 'ERROR lexeme)]
-   ["constant"           (token 'CONSTANT lexeme)]
-   ["takes"              (token 'TAKES lexeme)]
-   ["returns"            (token 'RETURNS lexeme)]
-   [opcode               (token 'OPCODE lexeme)]
    [comment              (token 'COMMENT lexeme)]
    [digits               (token 'NUMBER lexeme)]
    [str                  (token 'STRING lexeme)]
@@ -64,7 +51,7 @@
    [funcdef              (token 'FUNCDEFINE lexeme)]
    [eventdef             (token 'EVENTDEFINE lexeme)]
    [identifier           (token 'IDENTIFIER lexeme)]
-   [free-storage-pointer (token 'FREE_STORAGE_POINTER lexeme)]
+   [free-storage-pointer (token 'FREE-STORAGE-POINTER lexeme)]
    ;; else
    [any-char             (token 'OTHER lexeme)]))
 
@@ -91,20 +78,7 @@
 (define           (lex str)
   (apply-port-proc basic-lexer str))
 
-(define (print-color text color)
-  (define color-code
-    (case color
-      [(black) "30"]
-      [(red) "31"]
-      [(green) "32"]
-      [(yellow) "33"]
-      [(blue) "34"]
-      [(magenta) "35"]
-      [(cyan) "36"]
-      [(white) "37"]
-      [else "0"]))  ; default to normal text
 
-  (printf "\033[~am~a\033[0m" color-code text))
 
 
 ;; iterate over each file under examples and parse it
