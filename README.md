@@ -2,33 +2,33 @@
 
 Puff is an experimental Huff compiler implemented in Racket. It currently supports a small subset of full Huff functionality.
 
-## Current Status
+# Current Status
 
 Very early WIP!
 
-### Implemented
+## Implemented
 
 Not much yet, but we can compile a basic contract that has a single MAIN macro, imports other files, and references constants.
 
-### Not Implemented
+## Not Implemented
 - Calling macros/functions from Main
 - Custom constructors
 - Built-ins like __FUNC_SIG, etc.
 - Lots of other stuff!
 
-## Usage
+# Usage
 
-### Requirements
+## Requirements
 
 - Racket
 - Rust
 
-#### Racket Libs
+### Racket Libs
 
 - `threading-lib`
 - `brag`
 
-### Build keccak library
+## Build keccak library
 
 Puff depends on the keccak implementation from [Alloy](https://github.com/alloy-rs/core). 
 
@@ -38,13 +38,13 @@ Clone the repository, then from its root, run:
 
 `make deps`
 
-### Run
+## Run
 
 Compile one of the example contracts:
 
 `racket main.rkt -b examples/add_two.huff`
 
-### [Optional] Compile executable
+## [Optional] Compile executable
 
 You can do this already with `raco exe main.rkt -o puffc` and then `raco distribute out puffc`. This gives you a directory (called `out`) containing an executable and the required lib. 
 
