@@ -23,6 +23,11 @@ Not much yet, but we can compile a basic contract that has a single MAIN macro, 
 - Racket
 - Rust
 
+#### Racket Libs
+
+- `threading-lib`
+- `brag`
+
 ### Build keccak library
 
 Puff depends on the keccak implementation from [Alloy](https://github.com/alloy-rs/core). 
