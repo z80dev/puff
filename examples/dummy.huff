@@ -1,0 +1,2 @@
+#include "./dummy2.huff"
+#define constant NAME = 0x1234

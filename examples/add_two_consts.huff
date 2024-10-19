@@ -1,0 +1,10 @@
+#include "./dummy.huff"
+
+#define macro MAIN() = takes(0) returns(0) {
+    [NAME]                // load first const
+    [NAME2]               // load second const
+    add                   // [number1+number2] // add number 1 and 2 and put the result onto the stack
+
+    0x00 mstore           // place [number1 + number2] in memory
+    0x20 0x00 return      // return the result
+}
