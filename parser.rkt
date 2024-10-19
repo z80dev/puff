@@ -1,2 +1,0 @@
-#lang brag
-huff-program: ">"*
