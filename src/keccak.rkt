@@ -3,9 +3,19 @@
 (require ffi/unsafe ffi/unsafe/define "assembler.rkt" threading)
 (require racket/runtime-path)
 
-(define-runtime-path libkeccak "../lib/libkeccak_lib.so")
+(define-runtime-path libdir "../lib")
 
-(define-ffi-definer define-keccak (ffi-lib libkeccak))
+;; define-runtime-path to each library file depending on system
+(define lib-path
+  (cond
+    [(eq? (system-type 'os) 'unix) (build-path libdir "libkeccak_lib.so")]
+    [(eq? (system-type 'os) 'windows) (build-path libdir "libkeccak_lib.dll")]
+    [(eq? (system-type 'os) 'macosx) (build-path libdir "libkeccak_lib.dylib")]
+    [else (error "Unsupported system type")]))
+
+;;(define-runtime-path libkeccak "../lib/libkeccak_lib")
+
+(define-ffi-definer define-keccak (ffi-lib lib-path))
 
 (define-keccak keccak256 (_fun _pointer _size _pointer -> _void))
 

@@ -1,0 +1,11 @@
+[package]
+name = "keccaklib"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "keccak_lib"
+crate-type = ["cdylib"]
+
+[dependencies]
+alloy-primitives = "0.8.8"
