@@ -23,6 +23,10 @@ endif
 
 deps: build_rust copy_lib
 
+install_racket_libs:
+	@echo "Installing Racket libraries..."
+	raco pkg install --auto --batch --link threading-lib brag
+
 build_rust:
 	@echo "Building Rust library..."
 	cd $(KECCAK_LIB_DIR) && cargo build --release
