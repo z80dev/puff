@@ -50,6 +50,10 @@
       (string-trim "\"")
       (string-trim "./")))
 
+(define (display-return val)
+  (displayln val)
+  val)
+
 (provide print-color
          bold
          number->hex
@@ -57,4 +61,5 @@
          format-filename
          byte->hex
          bytes->hex
-         concat-hex)
+         concat-hex
+         display-return)

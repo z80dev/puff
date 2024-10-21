@@ -2,6 +2,7 @@
 
 (require "huff-ops.rkt"
          "utils.rkt"
+         "phases/hexvals.rkt"
          threading
          racket/match
          racket/list)
@@ -9,40 +10,7 @@
 ;; in this file: functions to generate actual opcodes
 ;; this means:
 ;; - huff instructions like mstore become "MSTORE"
-;; - hex values like "0x20" become "PUSH1 0x20"
 ;; - constructor generators
-
-(define (handle-val val)
-  (cond
-    [(instruction? val) (list (instruction->opcode val))]
-    [else (begin
-            (displayln (format "Unknown value: ~a" val))
-            (list (string-upcase (symbol->string val))))]))
-
-(define (handle-hex val)
-  (if (equal? val "0x00")
-      (list "PUSH0")
-   (let* (
-          [num-bytes (ceiling (/ (- (string-length val) 2) 2))]
-          [push-instr (string-append "PUSH" (number->string num-bytes))])
-     (list push-instr val))))
-
-(define (handle-fncall expr)
-  (match (second expr)
-    ["__FUNC_SIG" (list expr)]
-    [_ (list expr)]))
-
-(define (handle-expr expr)
-  (match (first expr)
-    ['hex (handle-hex (second expr))]
-    ['const-ref (list expr)]
-    ['fncall (handle-fncall expr)]
-    ['body (apply append (map handle-tree (rest expr)))]))
-
-(define (handle-tree tree)
-  (if (list? tree)
-      (handle-expr tree)
-      (handle-val tree)))
 
 (define (generate-copy-constructor sz)
   (let* ([sz-str (number->string sz 16)]
@@ -50,9 +18,7 @@
                      (string-append "0" sz-str)
                      sz-str)]
          [sz-hex-str (string-append "0x" sz-str)])
-    (append (handle-hex sz-hex-str) '("DUP1" "PUSH1" "0x09" "RETURNDATASIZE" "CODECOPY" "RETURNDATASIZE" "RETURN"))))
+    (append (hex->instrs sz-hex-str) '("DUP1" "PUSH1" "0x09" "RETURNDATASIZE" "CODECOPY" "RETURNDATASIZE" "RETURN"))))
 
-(provide handle-tree
-         handle-hex
-         handle-val
+(provide
          generate-copy-constructor)

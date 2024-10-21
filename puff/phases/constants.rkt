@@ -8,7 +8,7 @@
 (define (handle-const-ref code constants)
   (match code
     [(list 'const-ref const)
-     (handle-tree (hash-ref constants const))]
+     (hash-ref constants const)]
     [_ code]))
 
 (define (make-const-handler constants)

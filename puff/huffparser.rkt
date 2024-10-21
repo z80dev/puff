@@ -13,7 +13,7 @@ defn : /DEFINE /FN IDENTIFIER args /EQUALS takes returns @scope
 args : /LPAREN @identifierlist* /RPAREN
 takes : /TAKES /LPAREN NUMBER /RPAREN
 returns : /RETURNS /LPAREN NUMBER /RPAREN
-scope : /LBRACE body /RBRACE
+scope : /LBRACE @body /RBRACE
 body : (hex | fncall | label | macro-arg | const-ref | IDENTIFIER | /COMMENT)*
 macro-arg : /LT IDENTIFIER /GT
 label: IDENTIFIER /COLON

@@ -35,15 +35,6 @@
                 (list)
                 (make-hash)))
 
-;; not really needed, but a struct for a specific macro's data
-;; TODO: decide if we should get rid of this and just use the list
-(struct macro-data (args takes returns body))
-
-;; constructor
-(define (make-macro-data defmacro)
-  (apply macro-data defmacro))
-
-
 ;; analyze all top-level nodes, outputting into the same data object
 (define (analyze-program program data)
   (for-each (lambda (n) (analyze-node n data)) (rest program)))
@@ -51,7 +42,7 @@
 ;; save each macro body in the data object
 (define (analyze-defmacro defmacro data)
   (match defmacro
-    [(list 'defmacro identifier args takes returns body) (hash-set! (program-data-macros data) identifier (list args takes returns body))]
+    [(list 'defmacro identifier args takes returns body ...) (hash-set! (program-data-macros data) identifier (list args takes returns body))]
     [_ (error "Invalid defmacro")]))
 
 ;; save each function body in the data object
@@ -119,7 +110,5 @@
     data))
 
 (provide (struct-out program-data)
-         (struct-out macro-data)
          make-program-data
-         make-macro-data
          analyze-node)

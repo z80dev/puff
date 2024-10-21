@@ -2,6 +2,7 @@
 
 (require racket/file
          racket/list
+         racket/match
          threading
          "lexer.rkt"
          "huffparser.rkt"
@@ -15,32 +16,35 @@
 
 (require "phases/constants.rkt")
 (require "phases/funcsigs.rkt")
+(require "phases/hexvals.rkt")
+(require "phases/opcodes.rkt")
 
+; TODO: This makes a lot of passes over the code
+; In the future, come up with a syntax that allows
+; for combining passes, probably by returning handlers
 (define (make-phases-pipeline data)
   (lambda~>
    (insert-constants data)
+   (insert-hexvals data)
    (insert-funcsigs data)
+   (insert-opcodes data)
    flatten))
 
-(define (compile-macro macro-data)
-  (let ([args (macro-data-args macro-data)]
-        [takes (macro-data-takes macro-data)]
-        [returns (macro-data-returns macro-data)]
-        [body  (macro-data-body macro-data)])
-    (handle-tree body)))
+(define (displayln-ret x)
+  (displayln x)
+  x)
 
 (define (compile-program-data-runtime data)
   (let* ([main-macro (hash-ref (program-data-macros data) "MAIN")]
          [phases (make-phases-pipeline data)]
          [constants (program-data-constants data)])
     (~> main-macro
-        make-macro-data
-        compile-macro
+        fourth
         phases
         assemble-opcodes)))
 
 (define (compile-program-data data)
-  (let* ([compiled-runtime (compile-program-data-runtime data)])
+  (let ([compiled-runtime (compile-program-data-runtime data)])
     (~> compiled-runtime
         byte-length
         generate-copy-constructor

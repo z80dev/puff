@@ -1,9 +1,9 @@
 #lang racket/base
 
-(require "../codegen.rkt")
 (require "../analysis.rkt")
 (require "../keccak.rkt")
 (require "../utils.rkt")
+(require "./hexvals.rkt")
 (require threading)
 (require racket/list)
 (require racket/match)
@@ -51,7 +51,7 @@
             [fndecls (program-data-fndecls data)]
             [args (hash-ref fndecls ident #f)]
             [sig (get-funcsig ident args)])
-       (handle-hex sig))]
+       (hex->instrs sig))]
     [_ code]))
 
 (define (insert-funcsigs code data)
