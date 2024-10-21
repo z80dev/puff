@@ -13,8 +13,6 @@
     [(eq? (system-type 'os) 'macosx) (build-path libdir "libkeccak_lib.dylib")]
     [else (error "Unsupported system type")]))
 
-;;(define-runtime-path libkeccak "../lib/libkeccak_lib")
-
 (define-ffi-definer define-keccak (ffi-lib lib-path))
 
 (define-keccak keccak256 (_fun _pointer _size _pointer -> _void))

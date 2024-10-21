@@ -54,9 +54,12 @@
        (hex->instrs sig))]
     [_ code]))
 
+(define (make-handler data)
+  (lambda (code)
+    (handle-fnsig-call code data)))
+
 (define (insert-funcsigs code data)
-  (map (lambda (x)
-         (handle-fnsig-call x data))
+  (map (make-handler data)
        code))
 
 (provide insert-funcsigs)

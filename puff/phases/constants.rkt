@@ -11,13 +11,13 @@
      (hash-ref constants const)]
     [_ code]))
 
-(define (make-const-handler constants)
+(define (make-handler constants)
   (lambda (code)
     (handle-const-ref code constants)))
 
 (define (insert-constants code data)
   (let* ([constants (program-data-constants data)]
-         [handler (make-const-handler constants)]
+         [handler (make-handler constants)]
          [res  (map handler code)])
     res))
 

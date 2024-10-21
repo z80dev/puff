@@ -2,10 +2,7 @@
 
 (require "huff-ops.rkt"
          "utils.rkt"
-         "phases/hexvals.rkt"
-         threading
-         racket/match
-         racket/list)
+         "phases/hexvals.rkt")
 
 ;; in this file: functions to generate actual opcodes
 ;; this means:

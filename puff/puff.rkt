@@ -16,6 +16,7 @@
 
 (require "phases/constants.rkt")
 (require "phases/funcsigs.rkt")
+(require "phases/errors.rkt")
 (require "phases/hexvals.rkt")
 (require "phases/opcodes.rkt")
 
@@ -27,6 +28,9 @@
    (insert-constants data)
    (insert-hexvals data)
    (insert-funcsigs data)
+   display-return
+   (insert-errorsigs data)
+   display-return
    (insert-opcodes data)
    flatten))
 
