@@ -1,7 +1,10 @@
-#lang racket
+#lang racket/base
+
 (require "huff-ops.rkt"
          "utils.rkt"
-         threading)
+         threading
+         racket/match
+         racket/list)
 
 ;; in this file: functions to generate actual opcodes
 ;; this means:

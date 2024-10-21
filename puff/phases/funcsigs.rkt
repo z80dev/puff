@@ -1,10 +1,13 @@
-#lang racket
+#lang racket/base
 
 (require "../codegen.rkt")
 (require "../analysis.rkt")
 (require "../keccak.rkt")
 (require "../utils.rkt")
 (require threading)
+(require racket/list)
+(require racket/match)
+(require racket/string)
 
 ;; hash table to act as cache for function signatures
 (define func-sigs (make-hash))

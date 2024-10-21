@@ -1,6 +1,7 @@
-#lang racket
+#lang racket/base
 
 (require threading)
+(require racket/string)
 
 (define (print-color text color)
   (define color-code

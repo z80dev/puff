@@ -1,6 +1,7 @@
-#lang racket
+#lang racket/base
 
 (require "utils.rkt")
+(require racket/string)
 
 #|
   This module provides a simple assembler for Ethereum Virtual Machine (EVM) opcodes.

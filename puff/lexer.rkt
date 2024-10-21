@@ -1,4 +1,5 @@
-#lang racket
+#lang racket/base
+
 (require brag/support rackunit "huffparser.rkt" "utils.rkt" "assembler.rkt" "huff-ops.rkt")
 
 (define-lex-abbrevs

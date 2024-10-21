@@ -1,4 +1,4 @@
-#lang racket
+#lang racket/base
 
 (require ffi/unsafe ffi/unsafe/define "assembler.rkt" threading)
 (require racket/runtime-path)

@@ -1,9 +1,13 @@
-#lang racket
+#lang racket/base
 
 (require "lexer.rkt"
          "huffparser.rkt"
          "utils.rkt"
-         threading)
+         threading
+         racket/list
+         racket/match
+         racket/file
+         racket/path)
 
 ;; some structs, for convenience getter/setter methods
 ;; program-data will contain all the data required to compile a contract

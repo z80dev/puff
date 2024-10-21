@@ -1,7 +1,8 @@
-#lang racket
+#lang racket/base
 
 (require "../codegen.rkt")
 (require "../analysis.rkt")
+(require racket/match)
 
 ;; replace all `(const-ref const) with the actual value of the constant from the hashmap
 (define (handle-const-ref code constants)

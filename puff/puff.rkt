@@ -1,5 +1,7 @@
-#lang racket
-(require racket/list
+#lang racket/base
+
+(require racket/file
+         racket/list
          threading
          "lexer.rkt"
          "huffparser.rkt"
