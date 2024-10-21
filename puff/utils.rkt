@@ -29,19 +29,20 @@
 (define (byte-length code)
   (apply + (for/list ([c code])
              (~> c
-                 number->hex
                  string-length
-                 (- 2)
                  (/ 2)))))
 
 (define (byte->hex byte)
   (let ([hex (number->string byte 16)])
-    (if (= (string-length hex) 1)
+    (if (odd? (string-length hex))
         (string-append "0" hex)
         hex)))
 
 (define (bytes->hex bytes)
   (string-append "0x" (apply string-append (map byte->hex bytes))))
+
+(define (concat-hex hexes)
+  (string-append "0x" (apply string-append hexes)))
 
 (define (format-filename filename)
   (~> filename
@@ -54,4 +55,5 @@
          byte-length
          format-filename
          byte->hex
-         bytes->hex)
+         bytes->hex
+         concat-hex)

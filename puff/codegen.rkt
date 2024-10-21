@@ -24,10 +24,16 @@
           [push-instr (string-append "PUSH" (number->string num-bytes))])
      (list push-instr val))))
 
+(define (handle-fncall expr)
+  (match (second expr)
+    ["__FUNC_SIG" (list expr)]
+    [_ (list expr)]))
+
 (define (handle-expr expr)
   (match (first expr)
     ['hex (handle-hex (second expr))]
     ['const-ref (list expr)]
+    ['fncall (handle-fncall expr)]
     ['body (apply append (map handle-tree (rest expr)))]))
 
 (define (handle-tree tree)
@@ -36,7 +42,11 @@
       (handle-val tree)))
 
 (define (generate-copy-constructor sz)
-  (let ([sz-hex-str (string-append "0x" (number->string sz 16))])
+  (let* ([sz-str (number->string sz 16)]
+         [sz-str (if (odd? (string-length sz-str))
+                     (string-append "0" sz-str)
+                     sz-str)]
+         [sz-hex-str (string-append "0x" sz-str)])
     (append (handle-hex sz-hex-str) '("DUP1" "PUSH1" "0x09" "RETURNDATASIZE" "CODECOPY" "RETURNDATASIZE" "RETURN"))))
 
 (provide handle-tree

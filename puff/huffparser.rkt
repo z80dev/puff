@@ -2,7 +2,8 @@
 program : @top-level*
 top-level : (declfn | event-abi-definition | deferror | defconst | defmacro | defn | include | COMMENT)*
 include: /INCLUDE STRING
-declfn : FUNCDECLARE
+declfn : /DEFINE /FUNCTION IDENTIFIER args VISIBILITY declreturns
+declreturns: /RETURNS @args
 event-abi-definition: EVENTDEFINE
 deferror : /DEFINE /ERROR IDENTIFIER args
 defconst : /DEFINE /CONSTANT IDENTIFIER /EQUALS (hex | FREE-STORAGE-POINTER)
@@ -20,6 +21,7 @@ const-ref : /LBRACKET IDENTIFIER /RBRACKET
 fncall : IDENTIFIER args
 fncall-with-scope : IDENTIFIER /LPAREN @identifierlist* /RPAREN @scope?
 identifierlist : @ident (COMMA @ident)*
-ident : (IDENTIFIER | macro-arg | hex | NUMBER)
+ident : (IDENTIFIER | macro-arg | hex | NUMBER | typed-ident)
+typed-ident: IDENTIFIER IDENTIFIER
 hex : HEX
 opcode: OPCODE

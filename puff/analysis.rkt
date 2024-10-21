@@ -95,6 +95,11 @@
        [_ (error "Invalid include")]))))
 #| END IMPORT HANDLING |#
 
+(define (analyze-declfn declfn data)
+  (match declfn
+     [(list 'declfn identifier args vis returns)
+      (hash-set! (program-data-fndecls data) identifier args)]
+     [_ (error "Invalid declfn")]))
 
 ;; top-level node-handler function
 (define (analyze-node node [data #f] [ctx #f])
@@ -105,7 +110,8 @@
       ['defmacro (analyze-defmacro node data)]
       ['include (analyze-include node data)]
       ['defconst (analyze-defconst node data)]
-      ['defn (analyze-defn node data)])
+      ['defn (analyze-defn node data)]
+      ['declfn (analyze-declfn node data)])
     data))
 
 (provide (struct-out program-data)

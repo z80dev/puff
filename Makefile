@@ -23,6 +23,10 @@ endif
 
 deps: build_rust copy_lib
 
+racket_executable:
+	@echo "Building Racket executable..."
+	raco exe -o puffc main.rkt
+
 install_racket_libs:
 	@echo "Installing Racket libraries..."
 	raco pkg install --auto --batch --link threading-lib brag

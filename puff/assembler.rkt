@@ -1,5 +1,7 @@
 #lang racket
 
+(require "utils.rkt")
+
 #|
   This module provides a simple assembler for Ethereum Virtual Machine (EVM) opcodes.
   It provides a mapping from opcode names to their hexadecimal values, and functions
@@ -167,8 +169,8 @@
 
 (define (assemble-opcode opcode)
   (cond
-    [(hash-has-key? opcode-map opcode) (hash-ref opcode-map opcode)]
-    [(string-prefix? opcode "0x") (string->number (substring opcode 2) 16)]
+    [(hash-has-key? opcode-map opcode) (byte->hex (hash-ref opcode-map opcode))]
+    [(string-prefix? opcode "0x") (substring opcode 2)]
     [else (error "Unknown opcode" opcode)]))
 
 (define (assemble-opcodes opcodes)

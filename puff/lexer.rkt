@@ -7,7 +7,7 @@
   [digitsOrLetters      (:+ (char-set "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"))]
   [hex-digits           (:+ (char-set "0123456789abcdefABCDEF"))]
   [hex-literal          (:seq "0x" hex-digits)]
-  [funcdef              (from/stop-before (:seq "#define function ") (:or " /" "\n"))]
+  [visibility           (:or "payable" "nonpayable" "view")]
   [eventdef             (from/stop-before (:seq "#define event ") (:or " /" "\n"))]
   [comment              (:or
                          (from/stop-before "//" "\n")
@@ -43,11 +43,11 @@
    ["table"              (token 'TABLE lexeme)]
    ["takes"              (token 'TAKES lexeme)]
    ["returns"            (token 'RETURNS lexeme)]
+   [visibility           (token 'VISIBILITY lexeme)]
    [comment              (token 'COMMENT lexeme)]
    [digits               (token 'NUMBER lexeme)]
    [str                  (token 'STRING lexeme)]
    [hex-literal          (token 'HEX lexeme)]
-   [funcdef              (token 'FUNCDECLARE lexeme)]
    [eventdef             (token 'EVENTDEFINE lexeme)]
    [identifier           (token 'IDENTIFIER lexeme)]
    [free-storage-pointer (token 'FREE-STORAGE-POINTER lexeme)]

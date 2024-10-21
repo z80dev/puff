@@ -1,6 +1,10 @@
 #include "./dummy.huff"
 
+#define function a() nonpayable returns ()
+#define function b(uint loool) view returns (uint)
+
 #define macro MAIN() = takes(0) returns(0) {
+    __FUNC_SIG(a)
     [NAME]                // load first const
     [NAME2]               // load second const
     add                   // [number1+number2] // add number 1 and 2 and put the result onto the stack

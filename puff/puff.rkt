@@ -12,6 +12,13 @@
          "analysis.rkt")
 
 (require "phases/constants.rkt")
+(require "phases/funcsigs.rkt")
+
+(define (make-phases-pipeline data)
+  (lambda~>
+   (insert-constants data)
+   (insert-funcsigs data)
+   flatten))
 
 (define (compile-macro macro-data)
   (let ([args (macro-data-args macro-data)]
@@ -22,11 +29,12 @@
 
 (define (compile-program-data-runtime data)
   (let* ([main-macro (hash-ref (program-data-macros data) "MAIN")]
+         [phases (make-phases-pipeline data)]
          [constants (program-data-constants data)])
     (~> main-macro
         make-macro-data
         compile-macro
-        (insert-constants constants)
+        phases
         assemble-opcodes)))
 
 (define (compile-program-data data)
@@ -44,7 +52,7 @@
       syntax->datum
       analyze-node
       compile-program-data
-      bytes->hex))
+      concat-hex))
 
 (define (compile-src-runtime src)
   (~> src
@@ -53,7 +61,7 @@
       syntax->datum
       analyze-node
       compile-program-data-runtime
-      bytes->hex))
+      concat-hex))
 
 (define (compile-filename filename)
   (~> filename
@@ -63,7 +71,7 @@
       syntax->datum
       (analyze-node #f (hash 'filename filename))
       compile-program-data
-      bytes->hex))
+      concat-hex))
 
 (define (compile-filename-runtime filename)
   (~> filename
@@ -73,6 +81,6 @@
       syntax->datum
       (analyze-node #f (hash 'filename filename))
       compile-program-data-runtime
-      bytes->hex))
+      concat-hex))
 
 (provide compile-filename compile-src compile-filename-runtime compile-src-runtime)
