@@ -17,8 +17,7 @@
 
 (define (insert-constants code data)
   (let* ([constants (program-data-constants data)]
-         [handler (make-handler constants)]
-         [res  (map handler code)])
-    res))
+         [handler (make-handler constants)])
+    (map handler code)))
 
 (provide insert-constants)

@@ -7,8 +7,6 @@
   This module provides a simple assembler for Ethereum Virtual Machine (EVM) opcodes.
   It provides a mapping from opcode names to their hexadecimal values, and functions
   to convert between opcode names and their hexadecimal values.
-
-  The module also provides functions to convert between bytes and hexadecimal strings.
 |#
 
 (define opcode-map

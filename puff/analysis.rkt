@@ -57,6 +57,23 @@
     [(list 'defconst identifier value) (hash-set! (program-data-constants data) identifier value)]
     [_ (error "Invalid defconst")]))
 
+(define (analyze-declfn declfn data)
+  (match declfn
+     [(list 'declfn identifier args vis returns)
+      (hash-set! (program-data-fndecls data) identifier args)]
+     [_ (error "Invalid declfn")]))
+
+(define (analyze-deferror deferror data)
+  (match deferror
+    [(list 'deferror identifier args) (hash-set! (program-data-errordefs data) identifier args)]
+    [_ (error "Invalid deferror")]))
+
+(define (analyze-defevent defevent data)
+  (match defevent
+    [(list 'defevent identifier args) (hash-set! (program-data-eventdefs data) identifier args)]
+    [_ (error "Invalid defevent")]))
+
+
 #| IMPORT HANDLING |#
 ;; macro to save the current context and restore it after the analysis
 ;; this is used for includes, which need to know the current file's directory
@@ -89,22 +106,6 @@
                                    (analyze-filename filename data))]
        [_ (error "Invalid include")]))))
 #| END IMPORT HANDLING |#
-
-(define (analyze-declfn declfn data)
-  (match declfn
-     [(list 'declfn identifier args vis returns)
-      (hash-set! (program-data-fndecls data) identifier args)]
-     [_ (error "Invalid declfn")]))
-
-(define (analyze-deferror deferror data)
-  (match deferror
-    [(list 'deferror identifier args) (hash-set! (program-data-errordefs data) identifier args)]
-    [_ (error "Invalid deferror")]))
-
-(define (analyze-defevent defevent data)
-  (match defevent
-    [(list 'defevent identifier args) (hash-set! (program-data-eventdefs data) identifier args)]
-    [_ (error "Invalid defevent")]))
 
 ;; top-level node-handler function
 (define (analyze-node node [data #f] [ctx #f])

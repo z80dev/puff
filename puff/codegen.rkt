@@ -6,7 +6,6 @@
 
 ;; in this file: functions to generate actual opcodes
 ;; this means:
-;; - huff instructions like mstore become "MSTORE"
 ;; - constructor generators
 
 (define (generate-copy-constructor sz)

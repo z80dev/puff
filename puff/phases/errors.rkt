@@ -17,9 +17,11 @@
 (define get-errorsig
   (let ([error-sigs (make-callsig-cache)])
     (lambda (ident args)
-      (format-errorsig (error-sigs ident args)))))
+      (~> ident
+          (error-sigs args)
+          format-errorsig))))
 
-(define (handle-errorsig-cal code data)
+(define (handle-errorsig-call code data)
   (match code
     [(list 'fncall "__ERROR" args)
      (let* ([ident (second args)]
@@ -31,7 +33,7 @@
 
 (define (make-handler data)
   (lambda (code)
-    (handle-errorsig-cal code data)))
+    (handle-errorsig-call code data)))
 
 (define (insert-errorsigs code data)
   (map (make-handler data) code))

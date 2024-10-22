@@ -53,7 +53,6 @@
    ;; else
    [any-char             (token 'OTHER lexeme)]))
 
-
 ;; port can be a string or a file
 (define (lex port)
   (apply-port-proc basic-lexer port))

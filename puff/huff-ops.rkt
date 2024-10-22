@@ -157,6 +157,6 @@
 (define (instruction->opcode op)
   (if (instruction? op)
       (string-upcase op)
-      (error 'huffop->opcode "not a huff opcode" op)))
+      (error 'instruction->opcode "not a huff opcode" op)))
 
 (provide huff-instructions instruction? instruction->opcode)

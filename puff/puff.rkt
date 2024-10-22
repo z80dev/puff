@@ -34,16 +34,12 @@
    (insert-opcodes data)
    flatten))
 
-(define (displayln-ret x)
-  (displayln x)
-  x)
-
 (define (compile-program-data-runtime data)
   (let* ([main-macro (hash-ref (program-data-macros data) "MAIN")]
          [phases (make-phases-pipeline data)]
          [constants (program-data-constants data)])
     (~> main-macro
-        fourth
+        fourth ;; fourth element is the macro body
         phases
         assemble-opcodes)))
 
