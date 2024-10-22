@@ -54,6 +54,28 @@
   (displayln val)
   val)
 
+(define (trim-0x str)
+  (string-trim str "0x"))
+
+(define (zero-pad-left hex [len 64])
+  (let* ([hex (trim-0x hex)]
+         [hex-len (string-length hex)]
+         [padding-len (- len hex-len)]
+         [padding (make-string padding-len #\0)])
+    (if (< hex-len len)
+        (string-append "0x" padding hex)
+        (string-append "0x" hex))))
+
+(define (zero-pad-right hex [len 64])
+  (let* ([hex (trim-0x hex)]
+         [hex-len (string-length hex)]
+         [padding-len (- len hex-len)]
+         [padding (make-string padding-len #\0)])
+    (if (< hex-len len)
+        (string-append "0x" hex padding)
+        (string-append "0x" hex))))
+
+
 (provide print-color
          bold
          number->hex
@@ -62,4 +84,6 @@
          byte->hex
          bytes->hex
          concat-hex
+         zero-pad-right
+         zero-pad-left
          display-return)

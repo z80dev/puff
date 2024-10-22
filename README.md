@@ -92,4 +92,4 @@ We define various phases of analysis in `analysis.rkt`. In this file we do all t
 
 ### Compilation
 
-This happens in `puff.rkt` and `codegen.rkt`. We coordinate the various steps in `puff.rkt` but most of the actual compilation logic is implemented in various handlers in `codegen.rkt `.
+This happens in `puff.rkt`, `codegen.rkt`, and all the phases under `puff/phases`. We coordinate the various steps in `puff.rkt` but most of the actual compilation logic is implemented in various handlers in `codegen.rkt ` and the `phases`.

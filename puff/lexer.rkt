@@ -9,7 +9,6 @@
   [hex-digits           (:+ (char-set "0123456789abcdefABCDEF"))]
   [hex-literal          (:seq "0x" hex-digits)]
   [visibility           (:or "payable" "nonpayable" "view")]
-  [eventdef             (from/stop-before (:seq "#define event ") (:or " /" "\n"))]
   [comment              (:or
                          (from/stop-before "//" "\n")
                          (from/to "/*" "*/"))]
@@ -49,7 +48,6 @@
    [digits               (token 'NUMBER lexeme)]
    [str                  (token 'STRING lexeme)]
    [hex-literal          (token 'HEX lexeme)]
-   [eventdef             (token 'EVENTDEFINE lexeme)]
    [identifier           (token 'IDENTIFIER lexeme)]
    [free-storage-pointer (token 'FREE-STORAGE-POINTER lexeme)]
    ;; else

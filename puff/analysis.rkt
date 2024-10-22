@@ -97,11 +97,14 @@
      [_ (error "Invalid declfn")]))
 
 (define (analyze-deferror deferror data)
-  (displayln deferror)
-  (displayln (program-data-errors data))
   (match deferror
     [(list 'deferror identifier args) (hash-set! (program-data-errordefs data) identifier args)]
     [_ (error "Invalid deferror")]))
+
+(define (analyze-defevent defevent data)
+  (match defevent
+    [(list 'defevent identifier args) (hash-set! (program-data-eventdefs data) identifier args)]
+    [_ (error "Invalid defevent")]))
 
 ;; top-level node-handler function
 (define (analyze-node node [data #f] [ctx #f])
@@ -114,6 +117,7 @@
       ['defconst (analyze-defconst node data)]
       ['defn (analyze-defn node data)]
       ['deferror (analyze-deferror node data)]
+      ['defevent (analyze-defevent node data)]
       ['declfn (analyze-declfn node data)])
     data))
 
