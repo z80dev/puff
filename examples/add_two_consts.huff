@@ -9,9 +9,6 @@
 #define event TestEvent(address indexed, uint256)
 
 #define macro MAIN() = takes(0) returns(0) {
-    __EVENT_HASH(TestEvent)
-    __ERROR(PanicError)
-    __FUNC_SIG(b)
     [NAME]                // load first const
     [NAME2]               // load second const
     add                   // [number1+number2] // add number 1 and 2 and put the result onto the stack

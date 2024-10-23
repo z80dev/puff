@@ -32,9 +32,7 @@
    (insert-funcsigs data)
    (insert-errorsigs data)
    (insert-eventsigs data)
-   display-return
    (insert-labels data)
-   display-return
    (insert-opcodes data)
    flatten))
 

@@ -17,6 +17,5 @@
     // they will be executed unless the program counter is altered or execution is
     // halted by a `revert`, `return`, `stop`, or `selfdestruct` opcode.
     success:
-        0x00 mstore
         0x20 0x00 return
 }

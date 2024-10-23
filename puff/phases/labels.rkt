@@ -42,7 +42,7 @@ maybe we should handle this in the assembler?
                   (hash-set! ht (cadr instr) cur)
                   (cons "jumpdest" (record-label-offsets (cdr code) ht (+ 1 cur))))
                 (cons instr (record-label-offsets (cdr code) ht (+ cur (subexpr-length instr)))))
-            (cons instr (record-label-offsets (cdr code) ht (+ cur 1)))))))
+            (cons instr (record-label-offsets (cdr code) ht (+ cur (subexpr-length instr))))))))
 
 (define (replace-labels code ht)
   (if (empty? code)
