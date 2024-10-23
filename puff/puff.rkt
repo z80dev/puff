@@ -20,6 +20,7 @@
 (require "phases/events.rkt")
 (require "phases/hexvals.rkt")
 (require "phases/opcodes.rkt")
+(require "phases/labels.rkt")
 
 ; TODO: This makes a lot of passes over the code
 ; In the future, come up with a syntax that allows
@@ -31,6 +32,9 @@
    (insert-funcsigs data)
    (insert-errorsigs data)
    (insert-eventsigs data)
+   display-return
+   (insert-labels data)
+   display-return
    (insert-opcodes data)
    flatten))
 
