@@ -10,7 +10,7 @@ interface IReturnsString {
 }
 
 interface IReturnsUint {
-    function getUint() external returns (uint);
+    function getUint() external returns (uint256);
 }
 
 contract CounterTest is Test {
@@ -42,5 +42,4 @@ contract CounterTest is Test {
         stringReturner.getString();
         //string memory result = stringReturner.getString();
     }
-
 }

@@ -150,12 +150,11 @@ contract CreateX {
      * a mutex lock to keep it as use-case agnostic as possible. Please ensure at the protocol
      * level that potentially malicious reentrant calls do not affect your smart contract system.
      */
-    function deployCreateAndInit(
-        bytes memory initCode,
-        bytes memory data,
-        Values memory values,
-        address refundAddress
-    ) public payable returns (address newContract) {
+    function deployCreateAndInit(bytes memory initCode, bytes memory data, Values memory values, address refundAddress)
+        public
+        payable
+        returns (address newContract)
+    {
         assembly ("memory-safe") {
             newContract := create(mload(values), add(initCode, 0x20), mload(initCode))
         }
@@ -191,11 +190,11 @@ contract CreateX {
      * a mutex lock to keep it as use-case agnostic as possible. Please ensure at the protocol
      * level that potentially malicious reentrant calls do not affect your smart contract system.
      */
-    function deployCreateAndInit(
-        bytes memory initCode,
-        bytes memory data,
-        Values memory values
-    ) public payable returns (address newContract) {
+    function deployCreateAndInit(bytes memory initCode, bytes memory data, Values memory values)
+        public
+        payable
+        returns (address newContract)
+    {
         newContract = deployCreateAndInit({initCode: initCode, data: data, values: values, refundAddress: msg.sender});
     }
 
@@ -215,15 +214,9 @@ contract CreateX {
         bytes20 implementationInBytes = bytes20(implementation);
         assembly ("memory-safe") {
             let clone := mload(0x40)
-            mstore(
-                clone,
-                hex"3d_60_2d_80_60_0a_3d_39_81_f3_36_3d_3d_37_3d_3d_3d_36_3d_73_00_00_00_00_00_00_00_00_00_00_00_00"
-            )
+            mstore(clone, hex"3d602d80600a3d3981f3363d3d373d3d3d363d73000000000000000000000000")
             mstore(add(clone, 0x14), implementationInBytes)
-            mstore(
-                add(clone, 0x28),
-                hex"5a_f4_3d_82_80_3e_90_3d_91_60_2b_57_fd_5b_f3_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00"
-            )
+            mstore(add(clone, 0x28), hex"5af43d82803e903d91602b57fd5bf30000000000000000000000000000000000")
             proxy := create(0, clone, 0x37)
         }
         if (proxy == address(0)) {
@@ -413,12 +406,11 @@ contract CreateX {
      * a mutex lock to keep it as use-case agnostic as possible. Please ensure at the protocol
      * level that potentially malicious reentrant calls do not affect your smart contract system.
      */
-    function deployCreate2AndInit(
-        bytes32 salt,
-        bytes memory initCode,
-        bytes memory data,
-        Values memory values
-    ) public payable returns (address newContract) {
+    function deployCreate2AndInit(bytes32 salt, bytes memory initCode, bytes memory data, Values memory values)
+        public
+        payable
+        returns (address newContract)
+    {
         // Note that the safeguarding function `_guard` is called as part of the overloaded function
         // `deployCreate2AndInit`.
         newContract = deployCreate2AndInit({
@@ -447,12 +439,11 @@ contract CreateX {
      * a mutex lock to keep it as use-case agnostic as possible. Please ensure at the protocol
      * level that potentially malicious reentrant calls do not affect your smart contract system.
      */
-    function deployCreate2AndInit(
-        bytes memory initCode,
-        bytes memory data,
-        Values memory values,
-        address refundAddress
-    ) public payable returns (address newContract) {
+    function deployCreate2AndInit(bytes memory initCode, bytes memory data, Values memory values, address refundAddress)
+        public
+        payable
+        returns (address newContract)
+    {
         // Note that the safeguarding function `_guard` is called as part of the overloaded function
         // `deployCreate2AndInit`.
         newContract = deployCreate2AndInit({
@@ -480,11 +471,11 @@ contract CreateX {
      * a mutex lock to keep it as use-case agnostic as possible. Please ensure at the protocol
      * level that potentially malicious reentrant calls do not affect your smart contract system.
      */
-    function deployCreate2AndInit(
-        bytes memory initCode,
-        bytes memory data,
-        Values memory values
-    ) public payable returns (address newContract) {
+    function deployCreate2AndInit(bytes memory initCode, bytes memory data, Values memory values)
+        public
+        payable
+        returns (address newContract)
+    {
         // Note that the safeguarding function `_guard` is called as part of the overloaded function
         // `deployCreate2AndInit`.
         newContract = deployCreate2AndInit({
@@ -509,24 +500,18 @@ contract CreateX {
      * a mutex lock to keep it as use-case agnostic as possible. Please ensure at the protocol
      * level that potentially malicious reentrant calls do not affect your smart contract system.
      */
-    function deployCreate2Clone(
-        bytes32 salt,
-        address implementation,
-        bytes memory data
-    ) public payable returns (address proxy) {
+    function deployCreate2Clone(bytes32 salt, address implementation, bytes memory data)
+        public
+        payable
+        returns (address proxy)
+    {
         bytes32 guardedSalt = _guard({salt: salt});
         bytes20 implementationInBytes = bytes20(implementation);
         assembly ("memory-safe") {
             let clone := mload(0x40)
-            mstore(
-                clone,
-                hex"3d_60_2d_80_60_0a_3d_39_81_f3_36_3d_3d_37_3d_3d_3d_36_3d_73_00_00_00_00_00_00_00_00_00_00_00_00"
-            )
+            mstore(clone, hex"3d602d80600a3d3981f3363d3d373d3d3d363d73000000000000000000000000")
             mstore(add(clone, 0x14), implementationInBytes)
-            mstore(
-                add(clone, 0x28),
-                hex"5a_f4_3d_82_80_3e_90_3d_91_60_2b_57_fd_5b_f3_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00"
-            )
+            mstore(add(clone, 0x28), hex"5af43d82803e903d91602b57fd5bf30000000000000000000000000000000000")
             proxy := create2(0, clone, 0x37, guardedSalt)
         }
         if (proxy == address(0)) {
@@ -572,11 +557,11 @@ contract CreateX {
      * @param deployer The 20-byte deployer address.
      * @return computedAddress The 20-byte address where a contract will be stored.
      */
-    function computeCreate2Address(
-        bytes32 salt,
-        bytes32 initCodeHash,
-        address deployer
-    ) public pure returns (address computedAddress) {
+    function computeCreate2Address(bytes32 salt, bytes32 initCodeHash, address deployer)
+        public
+        pure
+        returns (address computedAddress)
+    {
         assembly ("memory-safe") {
             // |                      | ↓ ptr ...  ↓ ptr + 0x0B (start) ...  ↓ ptr + 0x20 ...  ↓ ptr + 0x40 ...   |
             // |----------------------|---------------------------------------------------------------------------|
@@ -629,7 +614,7 @@ contract CreateX {
      */
     function deployCreate3(bytes32 salt, bytes memory initCode) public payable returns (address newContract) {
         bytes32 guardedSalt = _guard({salt: salt});
-        bytes memory proxyChildBytecode = hex"67_36_3d_3d_37_36_3d_34_f0_3d_52_60_08_60_18_f3";
+        bytes memory proxyChildBytecode = hex"67363d3d37363d34f03d5260086018f3";
         address proxy;
         assembly ("memory-safe") {
             proxy := create2(0, add(proxyChildBytecode, 32), mload(proxyChildBytecode), guardedSalt)
@@ -640,7 +625,7 @@ contract CreateX {
         emit Create3ProxyContractCreation({newContract: proxy, salt: guardedSalt});
 
         newContract = computeCreate3Address({salt: guardedSalt});
-        (bool success, ) = proxy.call{value: msg.value}(initCode);
+        (bool success,) = proxy.call{value: msg.value}(initCode);
         _requireSuccessfulContractCreation({success: success, newContract: newContract});
         emit ContractCreation({newContract: newContract});
     }
@@ -691,7 +676,7 @@ contract CreateX {
         address refundAddress
     ) public payable returns (address newContract) {
         bytes32 guardedSalt = _guard({salt: salt});
-        bytes memory proxyChildBytecode = hex"67_36_3d_3d_37_36_3d_34_f0_3d_52_60_08_60_18_f3";
+        bytes memory proxyChildBytecode = hex"67363d3d37363d34f03d5260086018f3";
         address proxy;
         assembly ("memory-safe") {
             proxy := create2(0, add(proxyChildBytecode, 32), mload(proxyChildBytecode), guardedSalt)
@@ -702,7 +687,7 @@ contract CreateX {
         emit Create3ProxyContractCreation({newContract: proxy, salt: guardedSalt});
 
         newContract = computeCreate3Address({salt: guardedSalt});
-        (bool success, ) = proxy.call{value: values.constructorAmount}(initCode);
+        (bool success,) = proxy.call{value: values.constructorAmount}(initCode);
         _requireSuccessfulContractCreation({success: success, newContract: newContract});
         emit ContractCreation({newContract: newContract});
 
@@ -742,12 +727,11 @@ contract CreateX {
      * the first 20 bytes equal to `msg.sender` in the `salt` to prevent maliciously intended frontrun
      * proxy deployments on other chains.
      */
-    function deployCreate3AndInit(
-        bytes32 salt,
-        bytes memory initCode,
-        bytes memory data,
-        Values memory values
-    ) public payable returns (address newContract) {
+    function deployCreate3AndInit(bytes32 salt, bytes memory initCode, bytes memory data, Values memory values)
+        public
+        payable
+        returns (address newContract)
+    {
         // Note that the safeguarding function `_guard` is called as part of the overloaded function
         // `deployCreate3AndInit`.
         newContract = deployCreate3AndInit({
@@ -777,12 +761,11 @@ contract CreateX {
      * a mutex lock to keep it as use-case agnostic as possible. Please ensure at the protocol
      * level that potentially malicious reentrant calls do not affect your smart contract system.
      */
-    function deployCreate3AndInit(
-        bytes memory initCode,
-        bytes memory data,
-        Values memory values,
-        address refundAddress
-    ) public payable returns (address newContract) {
+    function deployCreate3AndInit(bytes memory initCode, bytes memory data, Values memory values, address refundAddress)
+        public
+        payable
+        returns (address newContract)
+    {
         // Note that the safeguarding function `_guard` is called as part of the overloaded function
         // `deployCreate3AndInit`.
         newContract = deployCreate3AndInit({
@@ -811,11 +794,11 @@ contract CreateX {
      * a mutex lock to keep it as use-case agnostic as possible. Please ensure at the protocol
      * level that potentially malicious reentrant calls do not affect your smart contract system.
      */
-    function deployCreate3AndInit(
-        bytes memory initCode,
-        bytes memory data,
-        Values memory values
-    ) public payable returns (address newContract) {
+    function deployCreate3AndInit(bytes memory initCode, bytes memory data, Values memory values)
+        public
+        payable
+        returns (address newContract)
+    {
         // Note that the safeguarding function `_guard` is called as part of the overloaded function
         // `deployCreate3AndInit`.
         newContract = deployCreate3AndInit({
@@ -842,10 +825,7 @@ contract CreateX {
             mstore(0x00, deployer)
             mstore8(0x0b, 0xff)
             mstore(0x20, salt)
-            mstore(
-                0x40,
-                hex"21_c3_5d_be_1b_34_4a_24_88_cf_33_21_d6_ce_54_2f_8e_9f_30_55_44_ff_09_e4_99_3a_62_31_9a_49_7c_1f"
-            )
+            mstore(0x40, hex"21c35dbe1b344a2488cf3321d6ce542f8e9f305544ff09e4993a62319a497c1f")
             mstore(0x14, keccak256(0x0b, 0x55))
             mstore(0x40, ptr)
             mstore(0x00, 0xd694)
@@ -919,9 +899,11 @@ contract CreateX {
      * @return redeployProtectionFlag The 8-byte enum for the selection of a cross-chain redeploy
      * protection.
      */
-    function _parseSalt(
-        bytes32 salt
-    ) internal view returns (SenderBytes senderBytes, RedeployProtectionFlag redeployProtectionFlag) {
+    function _parseSalt(bytes32 salt)
+        internal
+        view
+        returns (SenderBytes senderBytes, RedeployProtectionFlag redeployProtectionFlag)
+    {
         if (address(bytes20(salt)) == msg.sender && bytes1(salt[20]) == hex"01") {
             (senderBytes, redeployProtectionFlag) = (SenderBytes.MsgSender, RedeployProtectionFlag.True);
         } else if (address(bytes20(salt)) == msg.sender && bytes1(salt[20]) == hex"00") {
@@ -1020,11 +1002,10 @@ contract CreateX {
      * @param returnData The return data from the contract initialisation call.
      * @param implementation The 20-byte address where the implementation was deployed.
      */
-    function _requireSuccessfulContractInitialisation(
-        bool success,
-        bytes memory returnData,
-        address implementation
-    ) internal view {
+    function _requireSuccessfulContractInitialisation(bool success, bytes memory returnData, address implementation)
+        internal
+        view
+    {
         if (!success || implementation.code.length == 0) {
             revert FailedContractInitialisation({emitter: _SELF, revertData: returnData});
         }
