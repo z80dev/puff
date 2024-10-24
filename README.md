@@ -8,18 +8,12 @@ Very early WIP!
 
 ## Implemented
 
-Not much yet, but we can compile a basic contract that has a single MAIN macro, imports other files, and references constants.
-
-- All opcodes
-- `#define function` and `__FUNC_SIG`
-- `#define error` and `__ERROR`
-- `#define constant` and `[CONSTANT]` syntax for const references
+Pretty much everything not mentioned in the next section
 
 ## Not Implemented
-- Calling macros/functions from Main
 - Custom constructors
-- Built-ins like __FUNC_SIG, etc.
-- Lots of other stuff!
+- Functions (no plan on supporting these, functions in huff are kinda weird imo lol)
+- Code/Jump Tables
 
 # Usage
 
