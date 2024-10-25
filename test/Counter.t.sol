@@ -5,12 +5,8 @@ import {Test, console} from "forge-std/Test.sol";
 import {Counter} from "../src/Counter.sol";
 import {CreateX} from "../src/CreateX.sol";
 
-interface IReturnsString {
-    function getString() external returns (bytes32);
-}
-
-interface IReturnsUint {
-    function getUint() external returns (uint256);
+interface IAddsUints {
+    function addUints(uint256, uint256) external returns (uint256);
 }
 
 contract CounterTest is Test {
@@ -23,23 +19,11 @@ contract CounterTest is Test {
         createx = new CreateX();
     }
 
-    function test_canDeploy() public {
-        bytes memory bytecode = hex"600d8060093d393df3611234611234015f5260205ff3";
-        bytes memory otherBytecode = hex"600d8060093d393df3611234611234015f5260205ff3";
+    function test_addNumbers() public {
+        bytes memory bytecode = hex"600c8060093d393df3600435602435015952595ff3";
         address newContract = createx.deployCreate(bytecode);
-        IReturnsUint stringReturner = IReturnsUint(newContract);
-        stringReturner.getUint();
-        address otherNewContract = createx.deployCreate(otherBytecode);
-        IReturnsUint otherStringReturner = IReturnsUint(otherNewContract);
-        otherStringReturner.getUint();
-    }
-
-    function test_returnString() public {
-        bytes memory bytecode = hex"601b8060093d393df36c48656c6c6f2c20576f726c64215f526016565f5ffd5b60205ff3";
-        bytes memory otherBytecode = hex"601c8060093d393df36c48656c6c6f2c20576f726c64215f52610017565f5ffd5b60205ff3";
-        address newContract = createx.deployCreate(bytecode);
-        IReturnsString stringReturner = IReturnsString(newContract);
-        stringReturner.getString();
-        //string memory result = stringReturner.getString();
+        IAddsUints adder = IAddsUints(newContract);
+        uint256 sum = adder.addUints(1, 2);
+        assertEq(sum, 3);
     }
 }

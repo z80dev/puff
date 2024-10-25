@@ -4,8 +4,8 @@
 }
 
 #define macro MAIN() = takes(0) returns(0) {
-    LOAD_UINT(0x0)
-    LOAD_UINT(0x20)
+    LOAD_UINT(0x4)
+    LOAD_UINT(0x24)
     add
 
     msize mstore

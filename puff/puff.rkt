@@ -21,12 +21,14 @@
 (require "phases/hexvals.rkt")
 (require "phases/opcodes.rkt")
 (require "phases/labels.rkt")
+(require "phases/macros.rkt")
 
 ; TODO: This makes a lot of passes over the code
 ; In the future, come up with a syntax that allows
 ; for combining passes, probably by returning handlers
 (define (make-phases-pipeline data)
   (lambda~>
+   (insert-macros data)
    (insert-constants data)
    (insert-hexvals data)
    (insert-funcsigs data)
@@ -38,8 +40,7 @@
 
 (define (compile-program-data-runtime data)
   (let* ([main-macro (hash-ref (program-data-macros data) "MAIN")]
-         [phases (make-phases-pipeline data)]
-         [constants (program-data-constants data)])
+         [phases (make-phases-pipeline data)])
     (~> main-macro
         fourth ;; fourth element is the macro body
         phases
