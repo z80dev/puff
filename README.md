@@ -4,8 +4,6 @@ Puff is an experimental Huff compiler implemented in Racket. It currently suppor
 
 # Current Status
 
-Very early WIP!
-
 ## Implemented
 
 Pretty much everything not mentioned in the next section
@@ -22,38 +20,37 @@ Pretty much everything not mentioned in the next section
 - Racket
 - Rust
 
-### Racket Libs
+### Installing Racket
 
-- `threading-lib`
-- `brag`
+``` sh
+# macOS with Homebrew
+brew install racket
 
-Install with:
+# Arch/Manjaro
+sudo pacman -S racket
 
-`make install_racket_libs`
+# Ubuntu/Debian
+sudo apt install racket
 
-## Build keccak library
+# Fedora
+sudo dnf install racket
+```
 
-Puff depends on the keccak implementation from [Alloy](https://github.com/alloy-rs/core). 
+## Installation
 
-We need a tiny bit of Rust code to build a library we can call from Racket over FFI. This is all handled by the makefile.
+After installing Racket and Rust, run:
 
-Clone the repository, then from its root, run:
+``` sh
+make install
+```
 
-`make deps`
+This will run a custom install script which ensures the required Rust dependency is compiled and Racket libraries are installed. Then, it builds an executable and puts it in your PATH. The install script will prompt you for a directory where you want the `puffc` executable to live.
 
 ## Run
 
 Compile one of the example contracts:
 
-`racket main.rkt -b examples/add_two.huff`
-
-## [Optional] Compile executable
-
-You can do this already with `raco exe main.rkt -o puffc` and then `raco distribute out puffc`. This gives you a directory (called `out`) containing an executable and the required lib. 
-
-I then ran `ln -s /home/z80/dev/puff/out/bin/puffc /home/z80/.local/bin/puffc` to create a symlink in a directory that's in my path, so I can call puffc from anywhere.
-
-I'll be automating this in some way but if you're interested, that's how you do it
+`puffc -b examples/add_two.huff`
 
 # Technical Documentation
 
@@ -87,3 +84,12 @@ We define various phases of analysis in `analysis.rkt`. In this file we do all t
 ### Compilation
 
 This happens in `puff.rkt`, `codegen.rkt`, and all the phases under `puff/phases`. We coordinate the various steps in `puff.rkt` but most of the actual compilation logic is implemented in various handlers in `codegen.rkt ` and the `phases`.
+
+## keccak library
+
+Puff depends on the keccak implementation from [Alloy](https://github.com/alloy-rs/core). 
+
+We need a tiny bit of Rust code to build a library we can call from Racket over FFI. This is all handled by the makefile.
+
+This rust code is found under `rust_src`
+
