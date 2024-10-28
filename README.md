@@ -20,7 +20,7 @@ Pretty much everything not mentioned in the next section
 - Racket
 - Rust
 
-### Installing Racket
+#### Installing Racket
 
 ``` sh
 # macOS with Homebrew
