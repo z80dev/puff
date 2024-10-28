@@ -44,7 +44,7 @@ After installing Racket and Rust, run:
 make install
 ```
 
-This will run a custom install script which ensures the required Rust dependency is compiled and Racket libraries are installed. Then, it builds an executable and puts it in your PATH. The install script will prompt you for a directory where you want the `puffc` executable to live.
+This will run a [custom install script](install.rkt) which ensures the required Rust dependency is compiled and Racket libraries are installed. Then, it builds an executable and puts it in your PATH. The install script will prompt you for a directory where you want the `puffc` executable to live.
 
 ## Run
 
