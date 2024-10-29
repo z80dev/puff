@@ -1,6 +1,6 @@
 # Huff, in Racket
 
-Puff is an experimental Huff compiler implemented in Racket. It currently supports a small subset of full Huff functionality.
+Puff is an experimental Huff compiler implemented in Racket.
 
 # Current Status
 
