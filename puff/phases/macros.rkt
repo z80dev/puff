@@ -14,9 +14,16 @@
        (eq? 'macro-arg (car code))))
 
 (define (insert-macro-args code data)
-  (if (is-macro-arg (car code))
-      (cons (hash-ref data (cadar code)) (cdr code))
-      (cons (car code) (insert-macro-args (cdr code)))))
+  (define (handle-macro-arg code)
+    ;; (cadar '((1 2 3) 4 5)) = 2, i.e. second element of first element in list
+    ;; (cadar '((macro-arg foo))) = 'foo
+    (cons (hash-ref data (cadar code)) (insert-macro-args (cdr code) data)))
+  (define (continue code)
+    (cons (car code) (insert-macro-args (cdr code) data)))
+  (cond
+   ((empty? code) '())
+   ((is-macro-arg (car code)) (handle-macro-arg code))
+   (else (continue code))))
 
 (define (get-macro-body code data)
   (let* ([name (cadr code)]
