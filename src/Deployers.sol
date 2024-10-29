@@ -8,7 +8,6 @@ interface _CheatCodes {
 }
 
 contract PuffDeployer {
-
     address constant HEVM_ADDRESS = address(bytes20(uint160(uint256(keccak256("hevm cheat code")))));
 
     /// @notice Initializes cheat codes in order to use ffi to compile Vyper contracts
@@ -36,20 +35,14 @@ contract PuffDeployer {
         }
 
         ///@notice check that the deployment was successful
-        require(
-            deployedAddress != address(0),
-            "PuffDeployer could not deploy contract"
-        );
+        require(deployedAddress != address(0), "PuffDeployer could not deploy contract");
 
         ///@notice return the address that the contract was deployed to
         return deployedAddress;
     }
-
 }
 
-
 contract HuffDeployer {
-
     address constant HEVM_ADDRESS = address(bytes20(uint160(uint256(keccak256("hevm cheat code")))));
 
     /// @notice Initializes cheat codes in order to use ffi to compile Vyper contracts
@@ -77,13 +70,9 @@ contract HuffDeployer {
         }
 
         ///@notice check that the deployment was successful
-        require(
-            deployedAddress != address(0),
-            "PuffDeployer could not deploy contract"
-        );
+        require(deployedAddress != address(0), "PuffDeployer could not deploy contract");
 
         ///@notice return the address that the contract was deployed to
         return deployedAddress;
     }
-
 }
