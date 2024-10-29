@@ -1,6 +1,5 @@
 #lang racket/base
 
-
 (require racket/list)
 (require "../analysis.rkt")
 
@@ -14,12 +13,21 @@
        (eq? 'macro-arg (car code))))
 
 (define (insert-macro-args code data)
+  ;; just calls self with rest of the code
+  (define (recurse)
+    (insert-macro-args (cdr code) data))
+
+  ;; this leaves the first element unmodified and recurses
+  (define (continue code)
+    (cons (car code) (recurse)))
+
+  ;; cons the value of the macro arg with the rest of the code
   (define (handle-macro-arg code)
     ;; (cadar '((1 2 3) 4 5)) = 2, i.e. second element of first element in list
     ;; (cadar '((macro-arg foo))) = 'foo
-    (cons (hash-ref data (cadar code)) (insert-macro-args (cdr code) data)))
-  (define (continue code)
-    (cons (car code) (insert-macro-args (cdr code) data)))
+    (cons (hash-ref data (cadar code)) (recurse)))
+
+  ;; here we handle the base case, the macro-arg case, or continue
   (cond
    ((empty? code) '())
    ((is-macro-arg (car code)) (handle-macro-arg code))

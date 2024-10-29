@@ -1,6 +1,7 @@
 #lang racket/base
-(require racket/cmdline "puff/puff.rkt")
-(require racket/match)
+(require racket/cmdline
+         racket/match
+         "puff/puff.rkt")
 
 (define filename "")
 (define compilation-output 'bytecode)
