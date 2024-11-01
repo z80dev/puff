@@ -5,21 +5,37 @@
 
 (define (is-macro-call code data)
   (and (list? code)
-       (eq? 'fncall (car code))
-       (hash-has-key? data (cadr code))))
+       (eq? 'fncall (first code))
+       (hash-has-key? data (second code))))
 
 (define (is-macro-arg code)
   (and (list? code)
-       (eq? 'macro-arg (car code))))
+       (eq? 'macro-arg (first code))))
+
+(define (fncall? code)
+  (and (list? code)
+       (eq? 'fncall (first code))))
+
+;; iterate over every element in code
+;; if its a '(macro-arg foo) then replace it with the value of foo
+(define (insert-args-from-data code data)
+  (define (replace-arg element)
+    (if (is-macro-arg element)
+        (hash-ref data (second element))
+        element))
+  (map replace-arg code))
+
+(define (insert-macroargs-to-fncall fncall data)
+  (list 'fncall (second fncall) (insert-args-from-data (third fncall) data)))
 
 (define (insert-macro-args code data)
   ;; just calls self with rest of the code
   (define (recurse)
-    (insert-macro-args (cdr code) data))
+    (insert-macro-args (rest code) data))
 
   ;; this leaves the first element unmodified and recurses
   (define (continue code)
-    (cons (car code) (recurse)))
+    (cons (first code) (recurse)))
 
   ;; cons the value of the macro arg with the rest of the code
   (define (handle-macro-arg code)
@@ -27,17 +43,21 @@
     ;; (cadar '((macro-arg foo))) = 'foo
     (cons (hash-ref data (cadar code)) (recurse)))
 
+  (define (handle-fncall node)
+    (cons (insert-macroargs-to-fncall node data) (recurse)))
+
   ;; here we handle the base case, the macro-arg case, or continue
   (cond
    ((empty? code) '())
-   ((is-macro-arg (car code)) (handle-macro-arg code))
+   ((fncall? (first code)) (handle-fncall (first code)))
+   ((is-macro-arg (first code)) (handle-macro-arg code))
    (else (continue code))))
 
 (define (get-macro-body code data)
-  (let* ([name (cadr code)]
-         [args (caddr code)]
+  (let* ([name (second code)]
+         [args (third code)]
          [macrodef (hash-ref data name)]
-         [argsdef (car macrodef)]
+         [argsdef (first macrodef)]
          [argsmap (make-hash)])
     (for ([k (rest argsdef)]
           [v (rest args)])
@@ -54,11 +74,14 @@
   (if (empty? code)
       code
       ; For non-empty code, analyze the first element
-      (let ([first-element (car code)]
-            [rest-code (cdr code)])
+      (let ([first-element (first code)]
+            [rest-code (rest code)])
 
         (if (is-macro-call first-element data)
             ; If it's a macro call, expand it and continue processing
+            ;; NOTE: Figure out how to properly pass args to nested macros
+            ;; right now they're ending up with the wrong values
+            ;; if the arg itself is a macro-arg,  we need to trickle that down somehow
             (let ([expanded-code (process-macro-element first-element rest-code data)])
               ;; recursive call with expanded code
               (insert-macro expanded-code data))
