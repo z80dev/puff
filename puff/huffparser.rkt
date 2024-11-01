@@ -14,7 +14,7 @@ args : /LPAREN @identifierlist* /RPAREN
 takes : /TAKES /LPAREN NUMBER /RPAREN
 returns : /RETURNS /LPAREN NUMBER /RPAREN
 scope : /LBRACE @body /RBRACE
-body : (hex | fncall | label | macro-arg | const-ref | IDENTIFIER | /COMMENT)*
+body : (hex | fncall | fncall-with-scope | label | macro-arg | const-ref | IDENTIFIER | /COMMENT)*
 macro-arg : /LT IDENTIFIER /GT
 label: IDENTIFIER /COLON
 const-ref : /LBRACKET IDENTIFIER /RBRACKET
