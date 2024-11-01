@@ -22,6 +22,7 @@
 (require "phases/opcodes.rkt")
 (require "phases/labels.rkt")
 (require "phases/macros.rkt")
+(require "phases/fsp.rkt")
 
 ; TODO: This makes a lot of passes over the code
 ; In the future, come up with a syntax that allows
@@ -30,12 +31,13 @@
   (lambda~>
    (insert-macros data)
    (insert-constants data)
-   (insert-hexvals data)
+   insert-fsp
+   insert-hexvals
    (insert-funcsigs data)
    (insert-errorsigs data)
    (insert-eventsigs data)
-   (insert-labels data)
-   (insert-opcodes data)
+   insert-labels
+   insert-opcodes
    flatten))
 
 (define (compile-program-data-runtime data)

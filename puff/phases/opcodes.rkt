@@ -7,7 +7,7 @@
    [(instruction? instr) (instruction->opcode instr)]
    [else instr]))
 
-(define (insert-opcodes code data)
+(define (insert-opcodes code)
   (map handle-instr code))
 
 (provide insert-opcodes)

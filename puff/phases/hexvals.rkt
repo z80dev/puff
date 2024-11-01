@@ -21,7 +21,7 @@
     [(list 'hex num) (hex->instrs num)]
     [_ instr]))
 
-(define (insert-hexvals code data)
+(define (insert-hexvals code)
   (map handle-instr code))
 
 (provide insert-hexvals hex->instrs)

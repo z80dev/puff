@@ -54,7 +54,7 @@ maybe we should handle this in the assembler?
                 (cons (list "PUSH1" (string-append "0x" (byte->hex (hash-ref ht instr)))) (replace-labels (cdr code) ht))
                 (cons instr (replace-labels (cdr code) ht)))))))
 
-(define (insert-labels code data)
+(define (insert-labels code)
   (let* ([ht (make-hash)]
          [code (record-label-offsets code ht 0)])
     (replace-labels code ht)))
