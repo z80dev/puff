@@ -1,5 +1,3 @@
-#include "./dummy.huff"
-
 #define function a() nonpayable returns ()
 #define function b(uint loool) view returns (uint)
 
@@ -7,6 +5,9 @@
 #define error Error(string)
 
 #define event TestEvent(address indexed, uint256)
+
+#define constant NAME = 0x1234
+#define constant NAME2 = 0x5678
 
 #define macro LOAD_UINT(cd_offset) = takes(0) returns(1) {
     <cd_offset>

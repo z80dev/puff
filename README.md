@@ -12,6 +12,7 @@ Pretty much everything not mentioned in the next section
 - Custom constructors
 - Functions (no plan on supporting these, functions in huff are kinda weird imo lol)
 - Code/Jump Tables
+- Free Storage Pointer
 
 # Usage
 

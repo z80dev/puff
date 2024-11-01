@@ -1,5 +1,3 @@
-#include "./dummy.huff"
-
 #define macro MAIN() = takes(0) returns(0) {
     0x04 calldataload     // [number1] // load first 32 bytes onto the stack - number 1
     0x24 calldataload     // [number2] // load second 32 bytes onto the stack - number 2
