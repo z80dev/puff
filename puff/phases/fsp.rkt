@@ -2,9 +2,6 @@
 
 (require "../utils.rkt")
 
-;; very simple. we start a counter at 0, and for each call to FREE_STORAGE_POINTER, we return the counter value then inc
-;; values should be hex strings
-
 (define counter 0)
 
 (define (free-storage-pointer)
@@ -23,4 +20,4 @@
 (define (insert-fsp code)
   (map handle-fsp-call code))
 
-(provide insert-fsp fsp-call? free-storage-pointer)
+(provide insert-fsp)

@@ -33,26 +33,39 @@ maybe we should handle this in the assembler?
           2))) ;; we're treating anything that isn't an opcode as a label reference and assuming they're 2 bytes long
 
 (define (record-label-offsets code ht cur)
-  (if (empty? code)
-      code
-      (let ([instr (car code)])
-        (if (list? instr)
-            (if (eq? 'label (car instr))
-                (begin
-                  (hash-set! ht (cadr instr) cur)
-                  (cons "jumpdest" (record-label-offsets (cdr code) ht (+ 1 cur))))
-                (cons instr (record-label-offsets (cdr code) ht (+ cur (subexpr-length instr)))))
-            (cons instr (record-label-offsets (cdr code) ht (+ cur (subexpr-length instr))))))))
+  (define done?
+    (empty? code))
+  (define (label? node)
+    (and (list? node) (eq? 'label (car node))))
+  (define (recurse new-cur)
+    (record-label-offsets (cdr code) ht new-cur))
+  (define (continue node)
+    (cons node (recurse  (+ cur (subexpr-length node)))))
+  (define (handle-label node)
+    (hash-set! ht (cadr node) cur)
+    (continue "jumpdest"))
+  (cond
+    [done? code]
+    [(label? (car code)) (handle-label (car code))]
+    [else (continue (car code))]))
 
 (define (replace-labels code ht)
-  (if (empty? code)
-      code
-      (let ([instr (car code)])
-        (if (list? instr)
-            (cons instr (replace-labels (cdr code) ht))
-            (if (hash-has-key? ht instr)
-                (cons (list "PUSH1" (string-append "0x" (byte->hex (hash-ref ht instr)))) (replace-labels (cdr code) ht))
-                (cons instr (replace-labels (cdr code) ht)))))))
+  (define done?
+    (empty? code))
+  (define (recurse)
+    (replace-labels (cdr code) ht))
+  (define (continue node)
+    (cons node (recurse)))
+  (define (labelref? node) ;; check if node is reference to a known label
+    (hash-has-key? ht node))
+  (define (wrap-label label) ;; wrap a label offset in PUSH1 + hex
+    (list "PUSH1" (string-append "0x" (byte->hex (hash-ref ht label)))))
+  (define (handle-labelref node)
+    (continue (wrap-label node)))
+  (cond
+   (done? code)
+   ((labelref? (car code)) (handle-labelref (car code)))
+   (else (continue (car code)))))
 
 (define (insert-labels code)
   (let* ([ht (make-hash)]
