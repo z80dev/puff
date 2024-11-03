@@ -39,7 +39,7 @@ maybe we should handle this in the assembler?
     (and (list? node) (eq? 'label (car node))))
   (define (recurse new-cur)
     (record-label-offsets (cdr code) ht new-cur))
-  (define (continue node)
+  (define (continue [node (car code)])
     (cons node (recurse  (+ cur (subexpr-length node)))))
   (define (handle-label node)
     (hash-set! ht (cadr node) cur)
@@ -47,14 +47,14 @@ maybe we should handle this in the assembler?
   (cond
     [done? code]
     [(label? (car code)) (handle-label (car code))]
-    [else (continue (car code))]))
+    [else (continue)]))
 
 (define (replace-labels code ht)
   (define done?
     (empty? code))
   (define (recurse)
     (replace-labels (cdr code) ht))
-  (define (continue node)
+  (define (continue [node (car code)])
     (cons node (recurse)))
   (define (labelref? node) ;; check if node is reference to a known label
     (hash-has-key? ht node))
@@ -65,7 +65,7 @@ maybe we should handle this in the assembler?
   (cond
    (done? code)
    ((labelref? (car code)) (handle-labelref (car code)))
-   (else (continue (car code)))))
+   (else (continue))))
 
 (define (insert-labels code)
   (let* ([ht (make-hash)]
