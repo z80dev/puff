@@ -10,7 +10,7 @@
     (list 'hex (number->hex result))))
 
 (define (fsp-call? code)
-  (eq? code "FREE_STORAGE_POINTER()"))
+  (equal? code "FREE_STORAGE_POINTER()"))
 
 (define (handle-fsp-call code)
    (if (fsp-call? code)

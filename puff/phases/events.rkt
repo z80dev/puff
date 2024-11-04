@@ -1,7 +1,6 @@
 #lang racket/base
 
 (require "../analysis.rkt")
-(require "../keccak.rkt")
 (require "../utils.rkt")
 (require "./hexvals.rkt")
 (require "./abi-base.rkt")

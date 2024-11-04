@@ -24,16 +24,16 @@
 
 ;; no-arg constructor
 (define (make-program-data)
-  (program-data (make-hash)
-                (make-hash)
-                (make-hash)
-                (make-hash)
-                (make-hash)
-                (make-hash)
-                (make-hash)
-                (make-hash)
-                (list)
-                (make-hash)))
+  (program-data (make-hash) ;; labels
+                (make-hash) ;; macros
+                (make-hash) ;; functions
+                (make-hash) ;; fndecls
+                (make-hash) ;; eventdefs
+                (make-hash) ;; errordefs
+                (make-hash) ;; constants
+                (make-hash) ;; errors
+                (list)      ;; includes
+                (make-hash)));; ctx
 
 ;; analyze all top-level nodes, outputting into the same data object
 (define (analyze-program program data)

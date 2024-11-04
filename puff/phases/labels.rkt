@@ -6,6 +6,14 @@
 (require "../huff-ops.rkt")
 (require "../utils.rkt")
 
+;; NOTE: This only handles up to 255 labels. if/when we want to support more than 255
+;; labels, we'll have to do it in multiple passes. this is because right now every
+;; label reference can be considered 2 bytes (PUSH1 + byte) but beyond that, some
+;; subset of labelrefs will be 3 bytes (PUSH2 + 2bytes). labelrefs can appear
+;; anywhere relative to where the actual labels are so we will have to record some
+;; more data during our first label-locating pass and also locate where labelrefs
+;; are, so we can correctly calculate and insert the byte offset for each label
+
 ;; TODO: Lots of hackiness in this pass. Clean up.
 
 #| we will handle labels in this file
@@ -18,7 +26,7 @@ maybe we should handle this in the assembler?
 |#
 
 ;; input is ((PUSH13 0x48656c6c6f2c20576f726c6421) (PUSH0) mstore success jump (PUSH0) (PUSH0) revert (label success) (PUSH0) mstore (PUSH1 0x20) (PUSH0) return)
-;; we need to replace each '(label name) with a "jmpdest" instruction, and record the byte offset of the label
+;; we need to replace each '(label name) with a "jumpdest" instruction, and record the byte offset of the label
 ;; then we need to replace each reference to a label with a push instruction that pushes the byte offset of the label
 
 (define (subexpr-length expr)
@@ -27,7 +35,7 @@ maybe we should handle this in the assembler?
                (string-prefix? (car expr) "PUSH")
                (string-prefix? (cadr expr) "0x"))
           (+ 1 (string->number (substring (car expr) 4)))
-       (length expr))
+       (length expr)) ;; TODO: potential bug here. list length might != length of expressions it contains
       (if (instruction? expr)
           1
           2))) ;; we're treating anything that isn't an opcode as a label reference and assuming they're 2 bytes long
