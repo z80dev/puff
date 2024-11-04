@@ -55,8 +55,6 @@ jobs:
           forge build --sizes
         id: build
 
-      - name: Install
-
       - name: Run Forge tests
         run: |
           forge test -vvv
