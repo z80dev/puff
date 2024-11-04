@@ -26,9 +26,9 @@
 
 
 #define macro MAIN() = takes(0) returns(0) {
-    LOAD(0x40)
-    LOAD(0x00)
-    LOAD(0x20)
+    LOAD(0x04)
+    LOAD(0x24)
+    LOAD(0x44)
     SAFE_ADD()
     SAFE_SUB()
 
