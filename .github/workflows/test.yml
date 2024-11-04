@@ -20,6 +20,22 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install Racket
+        uses: Bogdanp/setup-racket@v1.11
+        with:
+          architecture: 'x64'
+          distribution: 'full'
+          variant: 'CS'
+          version: 'stable'
+
+      - run: raco pkg install --auto
+
+      - name: Create Puff Executable
+        run: |
+          mkdir -p $GITHUB_WORKSPACE/bin
+          raco exe -o $GITHUB_WORKSPACE/bin/puffc main.rkt
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
@@ -39,7 +55,9 @@ jobs:
           forge build --sizes
         id: build
 
-      # - name: Run Forge tests
-      #   run: |
-      #     forge test -vvv
-      #   id: test
+      - name: Install
+
+      - name: Run Forge tests
+        run: |
+          forge test -vvv
+        id: test
