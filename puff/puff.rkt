@@ -12,17 +12,8 @@
          "huff-ops.rkt"
          "utils.rkt"
          "codegen.rkt"
-         "analysis.rkt")
-
-(require "phases/constants.rkt")
-(require "phases/funcsigs.rkt")
-(require "phases/errors.rkt")
-(require "phases/events.rkt")
-(require "phases/hexvals.rkt")
-(require "phases/opcodes.rkt")
-(require "phases/labels.rkt")
-(require "phases/macros.rkt")
-(require "phases/fsp.rkt")
+         "analysis.rkt"
+         "phases/phases.rkt")
 
 ; TODO: This makes a lot of passes over the code
 ; In the future, come up with a syntax that allows
