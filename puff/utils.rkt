@@ -39,6 +39,15 @@
         (string-append "0" hex)
         hex)))
 
+(define (word->hex word)
+  (let ([hex (number->string word 16)])
+    (let ([len (string-length hex)])
+      (cond
+        [(= len 1) (string-append "000" hex)]
+        [(= len 2) (string-append "00" hex)]
+        [(= len 3) (string-append "0" hex)]
+        [else hex]))))
+
 (define (bytes->hex bytes)
   (string-append "0x" (apply string-append (map byte->hex bytes))))
 
@@ -82,6 +91,7 @@
          byte-length
          format-filename
          byte->hex
+         word->hex
          bytes->hex
          concat-hex
          zero-pad-right

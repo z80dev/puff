@@ -6,13 +6,9 @@
 (require "../huff-ops.rkt")
 (require "../utils.rkt")
 
-;; NOTE: This only handles up to 255 labels. if/when we want to support more than 255
-;; labels, we'll have to do it in multiple passes. this is because right now every
-;; label reference can be considered 2 bytes (PUSH1 + byte) but beyond that, some
-;; subset of labelrefs will be 3 bytes (PUSH2 + 2bytes). labelrefs can appear
-;; anywhere relative to where the actual labels are so we will have to record some
-;; more data during our first label-locating pass and also locate where labelrefs
-;; are, so we can correctly calculate and insert the byte offset for each label
+;; NOTE: This now handles up to 65535 labels/offsets. Each label reference uses
+;; PUSH2 + 2 bytes to ensure we can handle larger bytecode. This allows for bytecode
+;; sizes up to 65535 bytes.
 
 ;; TODO: Lots of hackiness in this pass. Clean up.
 
@@ -38,7 +34,7 @@ maybe we should handle this in the assembler?
        (length expr)) ;; TODO: potential bug here. list length might != length of expressions it contains
       (if (instruction? expr)
           1
-          2))) ;; we're treating anything that isn't an opcode as a label reference and assuming they're 2 bytes long
+          3))) ;; we're treating anything that isn't an opcode as a label reference and assuming they're 3 bytes long (PUSH2 + 2 bytes)
 
 (define (record-label-offsets code ht cur)
   (define done?
@@ -66,8 +62,8 @@ maybe we should handle this in the assembler?
     (cons node (recurse)))
   (define (labelref? node) ;; check if node is reference to a known label
     (hash-has-key? ht node))
-  (define (wrap-label label) ;; wrap a label offset in PUSH1 + hex
-    (list "PUSH1" (string-append "0x" (byte->hex (hash-ref ht label)))))
+  (define (wrap-label label) ;; wrap a label offset in PUSH2 + hex
+    (list "PUSH2" (string-append "0x" (word->hex (hash-ref ht label)))))
   (define (handle-labelref node)
     (continue (wrap-label node)))
   (cond
