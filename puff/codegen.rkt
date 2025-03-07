@@ -13,8 +13,15 @@
          [sz-str (if (odd? (string-length sz-str))
                      (string-append "0" sz-str)
                      sz-str)]
-         [sz-hex-str (string-append "0x" sz-str)])
-    (append (hex->instrs sz-hex-str) '("DUP1" "PUSH1" "0x09" "RETURNDATASIZE" "CODECOPY" "RETURNDATASIZE" "RETURN"))))
+         [sz-hex-str (string-append "0x" sz-str)]
+         ;; Calculate the correct offset based on length bytes
+         [length-bytes (ceiling (/ (string-length sz-str) 2))]
+         [offset-str (number->string (+ 9 (- length-bytes 1)) 16)]
+         [offset-str (if (odd? (string-length offset-str))
+                         (string-append "0" offset-str)
+                         offset-str)]
+         [offset-val (format "0x~a" offset-str)])
+    (append (hex->instrs sz-hex-str) (list "DUP1" "PUSH1" offset-val "RETURNDATASIZE" "CODECOPY" "RETURNDATASIZE" "RETURN"))))
 
 (provide
          generate-copy-constructor)
